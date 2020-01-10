@@ -51,6 +51,15 @@ def preprocess_text(text):
     text_split = text.split()
     text_split = [w for w in text_split
                   if w not in english_stopwords]
+
+    # remove @mentions
+    text_split = [w for w in text_split
+                  if not w.startswith("@")]
+
+    # remove hypertext links
+    text_split = [w for w in text_split
+                  if not w.startswith("http")]
+
     text = " ".join(text_split)
 
     # stemming

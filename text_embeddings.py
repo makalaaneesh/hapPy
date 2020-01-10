@@ -1,4 +1,4 @@
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 
 
 def _encode_text(xtrain, xtest, col_name, vectorizer):
@@ -29,6 +29,13 @@ def encode_bag_of_words(xtrain, xtest, col_name, max_ngram=2):
     essay_bow_vectorizer = CountVectorizer(ngram_range=(1, max_ngram),
                                            min_df=10)
     x_train_features, x_test_features, vectorizer = _encode_text(xtrain, xtest, col_name, essay_bow_vectorizer)
+
+    return x_train_features, x_test_features, vectorizer
+
+
+def encode_tdfif(xtrain, xtest, col_name, max_ngram=2):
+    essay_tfidf_vectorizer = TfidfVectorizer(ngram_range=(1, max_ngram), min_df=10)
+    x_train_features, x_test_features, vectorizer = _encode_text(xtrain, xtest, col_name, essay_tfidf_vectorizer)
 
     return x_train_features, x_test_features, vectorizer
 
