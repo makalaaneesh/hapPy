@@ -1,6 +1,7 @@
 import pandas as pd
 import text_embeddings
 import preprocess
+import json
 
 def is_text_depressed(model, text, **kwargs):
     prediction = {}
@@ -51,6 +52,23 @@ def manual_test(model, **kwargs):
                                                              'is_depressed(model output)',
                                                              'model output probability (if any)'])
     return records_df.sort_values('is_depressed(expected)')
+
+
+def test_tweets_from_file(model, filepath, **kwargs):
+    with open(filepath, 'r') as f:
+        tweets = json.load(f)
+    tweet_texts = list(tweets.values())
+    records = []
+
+    for test_text in tweet_texts:
+        prediction = is_text_depressed(model, test_text, **kwargs)
+        records.append((test_text, prediction['class'], prediction.get('prob', None)))
+
+    records_df = pd.DataFrame.from_records(records, columns=['Text',
+                                                             'is_depressed(model output)',
+                                                             'model output probability (if any)'])
+    return records_df.sort_values('is_depressed(model output)')
+
 
 
 
