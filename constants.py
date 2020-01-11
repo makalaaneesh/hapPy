@@ -1,0 +1,3 @@
+BOW = "BAG_OF_WORDS"
+TFIDF = "TFIDF"
+TEXT = "text"

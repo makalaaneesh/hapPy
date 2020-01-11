@@ -1,6 +1,7 @@
 from kafka import KafkaProducer, KafkaConsumer
 from cached_property import cached_property
 
+
 class KafkaClient():
     def __init__(self,
                  bootstrap_servers=['localhost:9092'],
