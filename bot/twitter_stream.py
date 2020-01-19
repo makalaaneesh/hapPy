@@ -1,17 +1,25 @@
 import tweepy
 from passwords import *
-from kafka_helper import KafkaClient
+from kafka_helper import MyKafkaProducer
+
+TOPIC_PUB = "raw_tweets"
 
 
 # override tweepy.StreamListener to add logic to on_status
 class MyStreamListener(tweepy.StreamListener):
+    def __init__(self, *args, **kwargs):
+        super(MyStreamListener, self).__init__(*args, **kwargs)
+        self.kafka_producer = MyKafkaProducer()
 
     def on_status(self, status):
         #         raise ValueError()
         if status.lang == 'en' and not status.text.startswith("RT"):
             print(status.text)
-            kafkac = KafkaClient()
-            kafkac.publish_message("raw_tweets", status.id_str, status.text)
+            status_info = {
+                'id': status.id_str,
+                'text': status.text
+            }
+            self.kafka_producer.publish_message(TOPIC_PUB, value=status_info)
 
 
     def on_error(self, status_code):
