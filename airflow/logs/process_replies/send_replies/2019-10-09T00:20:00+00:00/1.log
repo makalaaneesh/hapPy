@@ -1,0 +1,29 @@
+[2020-01-20 13:59:22,719] {taskinstance.py:655} INFO - Dependencies all met for <TaskInstance: process_replies.send_replies 2019-10-09T00:20:00+00:00 [queued]>
+[2020-01-20 13:59:22,728] {taskinstance.py:655} INFO - Dependencies all met for <TaskInstance: process_replies.send_replies 2019-10-09T00:20:00+00:00 [queued]>
+[2020-01-20 13:59:22,728] {taskinstance.py:866} INFO - 
+--------------------------------------------------------------------------------
+[2020-01-20 13:59:22,728] {taskinstance.py:867} INFO - Starting attempt 1 of 1
+[2020-01-20 13:59:22,728] {taskinstance.py:868} INFO - 
+--------------------------------------------------------------------------------
+[2020-01-20 13:59:22,735] {taskinstance.py:887} INFO - Executing <Task(PythonOperator): send_replies> on 2019-10-09T00:20:00+00:00
+[2020-01-20 13:59:22,737] {standard_task_runner.py:52} INFO - Started process 5362 to run task
+[2020-01-20 13:59:22,776] {logging_mixin.py:112} INFO - [2020-01-20 13:59:22,775] {dagbag.py:403} INFO - Filling up the DagBag from /Users/aneeshmakala/Documents/ComputerScience/datascience/hapPy/airflow/dags/process_replies.py
+[2020-01-20 13:59:22,795] {logging_mixin.py:112} INFO - Running %s on host %s <TaskInstance: process_replies.send_replies 2019-10-09T00:20:00+00:00 [running]> Aneeshs-MacBook-Pro.local
+[2020-01-20 13:59:22,810] {python_operator.py:105} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_EMAIL=makalaaneesh18@mail.com
+AIRFLOW_CTX_DAG_OWNER=me
+AIRFLOW_CTX_DAG_ID=process_replies
+AIRFLOW_CTX_TASK_ID=send_replies
+AIRFLOW_CTX_EXECUTION_DATE=2019-10-09T00:20:00+00:00
+AIRFLOW_CTX_DAG_RUN_ID=scheduled__2019-10-09T00:20:00+00:00
+[2020-01-20 13:59:22,815] {logging_mixin.py:112} INFO - [2020-01-20 13:59:22,814] {base_hook.py:84} INFO - Using connection to: id: mongo_default. Host: 127.0.0.1, Port: 27017, Schema: None, Login: None, Password: None, extra: None
+[2020-01-20 13:59:22,826] {logging_mixin.py:112} INFO - {'_id': '1218913990501257217', 'text': '"Life isn’t so bad. It’s not so bad." - Nishida #SwordArtOnline', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 13:59:22,826] {logging_mixin.py:112} INFO - {'_id': '1218913944053714949', 'text': 'I don’t think McGregor ever wanna see this shit again in his life. https://t.co/3Le9FZtYgy', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 13:59:22,826] {logging_mixin.py:112} INFO - {'_id': '1218913955214696451', 'text': 'living my worst life 🚫🧢', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 13:59:22,826] {logging_mixin.py:112} INFO - {'_id': '1218913890123374592', 'text': 'To be a good mother while struggling, heart broken, or even just facing the reality of life is one of the hardest r… https://t.co/lsWIEoLJh8', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 13:59:22,827] {logging_mixin.py:112} INFO - {'_id': '1218914088975327234', 'text': '@SpardaTheeGod @ArsonProbable @KEEMSTAR Literally nothing owen here is going nowhere in life', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 13:59:22,827] {logging_mixin.py:112} INFO - [2020-01-20 13:59:22,827] {tweet_reply.py:39} INFO - Inserting replies in tweet_replies collection
+[2020-01-20 13:59:22,830] {logging_mixin.py:112} INFO - [2020-01-20 13:59:22,830] {tweet_reply.py:24} INFO - deleting tweets from tweets collection
+[2020-01-20 13:59:22,832] {logging_mixin.py:112} INFO - [2020-01-20 13:59:22,831] {tweet_reply.py:35} INFO - Succesfully deleted 5 docs
+[2020-01-20 13:59:22,832] {python_operator.py:114} INFO - Done. Returned value was: None
+[2020-01-20 13:59:32,711] {logging_mixin.py:112} INFO - [2020-01-20 13:59:32,710] {local_task_job.py:103} INFO - Task exited with return code 0

@@ -1,10 +1,5 @@
-import sys
-import os
-sys.path.insert(0, os.path.abspath("../models/"))
-
-
-from kafka_helper import MyKafkaConsumerProducer
-import models
+from bot.kafka_helper import MyKafkaConsumerProducer
+from models import model
 
 
 GROUP = "predictor"
@@ -15,7 +10,7 @@ TOPIC_PUB = "depression_tweets"
 class PredictorConsumerProducer(MyKafkaConsumerProducer):
     def __init__(self, *args, **kwargs):
         super(PredictorConsumerProducer, self).__init__(*args, **kwargs)
-        self.model = models.load_model()
+        self.model = model.load_model()
 
     def transform(self, msg):
         prediction_info = self.model.predict(msg['text'])

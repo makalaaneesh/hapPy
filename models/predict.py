@@ -1,6 +1,6 @@
 import pandas as pd
-import text_embeddings
-import preprocess
+from models import text_embeddings
+from models import preprocess
 import json
 
 def is_text_depressed(model, text, **kwargs):

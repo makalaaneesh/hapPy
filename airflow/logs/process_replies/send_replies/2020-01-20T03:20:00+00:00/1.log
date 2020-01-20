@@ -1,0 +1,29 @@
+[2020-01-20 14:31:25,929] {taskinstance.py:655} INFO - Dependencies all met for <TaskInstance: process_replies.send_replies 2020-01-20T03:20:00+00:00 [queued]>
+[2020-01-20 14:31:25,935] {taskinstance.py:655} INFO - Dependencies all met for <TaskInstance: process_replies.send_replies 2020-01-20T03:20:00+00:00 [queued]>
+[2020-01-20 14:31:25,935] {taskinstance.py:866} INFO - 
+--------------------------------------------------------------------------------
+[2020-01-20 14:31:25,935] {taskinstance.py:867} INFO - Starting attempt 1 of 1
+[2020-01-20 14:31:25,935] {taskinstance.py:868} INFO - 
+--------------------------------------------------------------------------------
+[2020-01-20 14:31:25,941] {taskinstance.py:887} INFO - Executing <Task(PythonOperator): send_replies> on 2020-01-20T03:20:00+00:00
+[2020-01-20 14:31:25,943] {standard_task_runner.py:52} INFO - Started process 6362 to run task
+[2020-01-20 14:31:25,980] {logging_mixin.py:112} INFO - [2020-01-20 14:31:25,980] {dagbag.py:403} INFO - Filling up the DagBag from /Users/aneeshmakala/Documents/ComputerScience/datascience/hapPy/airflow/dags/process_replies.py
+[2020-01-20 14:31:25,999] {logging_mixin.py:112} INFO - Running %s on host %s <TaskInstance: process_replies.send_replies 2020-01-20T03:20:00+00:00 [running]> 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa
+[2020-01-20 14:31:26,011] {python_operator.py:105} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_EMAIL=makalaaneesh18@mail.com
+AIRFLOW_CTX_DAG_OWNER=me
+AIRFLOW_CTX_DAG_ID=process_replies
+AIRFLOW_CTX_TASK_ID=send_replies
+AIRFLOW_CTX_EXECUTION_DATE=2020-01-20T03:20:00+00:00
+AIRFLOW_CTX_DAG_RUN_ID=scheduled__2020-01-20T03:20:00+00:00
+[2020-01-20 14:31:26,015] {logging_mixin.py:112} INFO - [2020-01-20 14:31:26,015] {base_hook.py:84} INFO - Using connection to: id: mongo_default. Host: 127.0.0.1, Port: 27017, Schema: None, Login: None, Password: None, extra: None
+[2020-01-20 14:31:26,021] {logging_mixin.py:112} INFO - {'_id': '1218914160567898113', 'text': '@Reuters Pffft.  Everyone has their own life, and their own path to choose.', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 14:31:26,022] {logging_mixin.py:112} INFO - {'_id': '1218914096009093120', 'text': '@TKVSH MY LIFE GOAL', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 14:31:26,022] {logging_mixin.py:112} INFO - {'_id': '1218914161633218561', 'text': "i lost 30 hours from my life liking y'all tweets just to flop. this has to stop never liking shit again https://t.co/tdr8vJvw2O", 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 14:31:26,022] {logging_mixin.py:112} INFO - {'_id': '1218914088035717120', 'text': 'Show!  Was @realDonaldTrump loss in his life and hurt!  Mirroring!  But @Snowden   EN,ED, ED.EN  was the build of a… https://t.co/jtlMjitAq6', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 14:31:26,022] {logging_mixin.py:112} INFO - {'_id': '1218914144382083073', 'text': 'She who was Cheated by men...MORE than once! BUT continues to be a steller example of "back in the saddle" "never s… https://t.co/6Kdqy2Jkw7', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 14:31:26,023] {logging_mixin.py:112} INFO - [2020-01-20 14:31:26,023] {tweet_reply.py:39} INFO - Inserting replies in tweet_replies collection
+[2020-01-20 14:31:26,026] {logging_mixin.py:112} INFO - [2020-01-20 14:31:26,025] {tweet_reply.py:24} INFO - deleting tweets from tweets collection
+[2020-01-20 14:31:26,027] {logging_mixin.py:112} INFO - [2020-01-20 14:31:26,027] {tweet_reply.py:35} INFO - Succesfully deleted 5 docs
+[2020-01-20 14:31:26,027] {python_operator.py:114} INFO - Done. Returned value was: None
+[2020-01-20 14:31:35,927] {logging_mixin.py:112} INFO - [2020-01-20 14:31:35,926] {local_task_job.py:103} INFO - Task exited with return code 0

@@ -28,7 +28,7 @@ def give_emoji_free_text(text):
     return emoji.get_emoji_regexp().sub(r'', text)
 
 
-def preprocess_text(text):
+def preprocess_text(text, is_stem=True):
     if not text:
         return text
     if not isinstance(text, str):
@@ -78,6 +78,7 @@ def preprocess_text(text):
     text = " ".join(text_split)
 
     # stemming
-    text = stem(text)
+    if is_stem:
+        text = stem(text)
 
     return text

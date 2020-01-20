@@ -1,0 +1,49 @@
+[2020-01-20 12:48:54,928] {taskinstance.py:655} INFO - Dependencies all met for <TaskInstance: process_replies.send_replies 2020-01-20T07:18:10.800003+00:00 [queued]>
+[2020-01-20 12:48:54,935] {taskinstance.py:655} INFO - Dependencies all met for <TaskInstance: process_replies.send_replies 2020-01-20T07:18:10.800003+00:00 [queued]>
+[2020-01-20 12:48:54,936] {taskinstance.py:866} INFO - 
+--------------------------------------------------------------------------------
+[2020-01-20 12:48:54,936] {taskinstance.py:867} INFO - Starting attempt 1 of 1
+[2020-01-20 12:48:54,936] {taskinstance.py:868} INFO - 
+--------------------------------------------------------------------------------
+[2020-01-20 12:48:54,943] {taskinstance.py:887} INFO - Executing <Task(PythonOperator): send_replies> on 2020-01-20T07:18:10.800003+00:00
+[2020-01-20 12:48:54,944] {standard_task_runner.py:52} INFO - Started process 2481 to run task
+[2020-01-20 12:48:54,981] {logging_mixin.py:112} INFO - [2020-01-20 12:48:54,981] {dagbag.py:403} INFO - Filling up the DagBag from /Users/aneeshmakala/Documents/ComputerScience/datascience/hapPy/airflow/dags/process_replies.py
+[2020-01-20 12:48:54,998] {logging_mixin.py:112} INFO - Running %s on host %s <TaskInstance: process_replies.send_replies 2020-01-20T07:18:10.800003+00:00 [running]> 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa
+[2020-01-20 12:48:55,011] {python_operator.py:105} INFO - Exporting the following env vars:
+AIRFLOW_CTX_DAG_EMAIL=makalaaneesh18@mail.com
+AIRFLOW_CTX_DAG_OWNER=me
+AIRFLOW_CTX_DAG_ID=process_replies
+AIRFLOW_CTX_TASK_ID=send_replies
+AIRFLOW_CTX_EXECUTION_DATE=2020-01-20T07:18:10.800003+00:00
+AIRFLOW_CTX_DAG_RUN_ID=manual__2020-01-20T07:18:10.800003+00:00
+[2020-01-20 12:48:55,017] {logging_mixin.py:112} INFO - [2020-01-20 12:48:55,017] {base_hook.py:84} INFO - Using connection to: id: mongo_default. Host: 127.0.0.1, Port: 27017, Schema: None, Login: None, Password: None, extra: None
+[2020-01-20 12:48:55,035] {logging_mixin.py:112} INFO - {'_id': '1218914127810301953', 'text': 'Honestly don’t thank that my life could get any worse I’m screwed everything in it up and pushed the people I want most away', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 12:48:55,036] {logging_mixin.py:112} INFO - {'_id': '1218914161482256384', 'text': 'All I’ve ever wanted in my life was to feel like I made a difference. I kept that dream alive in my heart, even if… https://t.co/1YVcpwJqRy', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 12:48:55,036] {logging_mixin.py:112} INFO - {'_id': '1218913952161124354', 'text': "it's okay to walk out of someone's life if you don't feel like you dont belong in it anymore 🤡", 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 12:48:55,036] {logging_mixin.py:112} INFO - {'_id': '1218913946897453056', 'text': '@MOONBANDlTO How much does it affect your life? \nFrom what it seems you do suffer from it and don‘t perceive the hy… https://t.co/Bi76QMis5j', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 12:48:55,037] {logging_mixin.py:112} INFO - {'_id': '1218914057677393927', 'text': 'Sometimes I’ll just be living my life and I suddenly get hit with a memory of an embarrassing thing I did in a past… https://t.co/c24cF9ci4L', 'reply': 'Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor. You’re a warrior, and you’re stronger than anything life throws your way. - Brooke Davis #MentalHealth #MentalHealthAwareness'}
+[2020-01-20 12:48:55,038] {taskinstance.py:1088} ERROR - batch op errors occurred
+Traceback (most recent call last):
+  File "/Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/lib/python3.7/site-packages/airflow/models/taskinstance.py", line 955, in _run_raw_task
+    result = task_copy.execute(context=context)
+  File "/Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/lib/python3.7/site-packages/airflow/operators/python_operator.py", line 113, in execute
+    return_value = self.execute_callable()
+  File "/Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/lib/python3.7/site-packages/airflow/operators/python_operator.py", line 118, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/Users/aneeshmakala/Documents/ComputerScience/datascience/hapPy/bot/tweet_reply.py", line 65, in send_replies
+    _insert_replies(mongo_hook, reply_documents)
+  File "/Users/aneeshmakala/Documents/ComputerScience/datascience/hapPy/bot/tweet_reply.py", line 31, in _insert_replies
+    docs=reply_docs)
+  File "/Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/lib/python3.7/site-packages/airflow/contrib/hooks/mongo_hook.py", line 142, in insert_many
+    return collection.insert_many(docs, **kwargs)
+  File "/Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/lib/python3.7/site-packages/pymongo/collection.py", line 758, in insert_many
+    blk.execute(write_concern, session=session)
+  File "/Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/lib/python3.7/site-packages/pymongo/bulk.py", line 511, in execute
+    return self.execute_command(generator, write_concern, session)
+  File "/Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/lib/python3.7/site-packages/pymongo/bulk.py", line 349, in execute_command
+    _raise_bulk_write_error(full_result)
+  File "/Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/lib/python3.7/site-packages/pymongo/bulk.py", line 140, in _raise_bulk_write_error
+    raise BulkWriteError(full_result)
+pymongo.errors.BulkWriteError: batch op errors occurred
+[2020-01-20 12:48:55,052] {taskinstance.py:1119} INFO - Marking task as FAILED.
+[2020-01-20 12:49:04,923] {logging_mixin.py:112} INFO - [2020-01-20 12:49:04,922] {local_task_job.py:103} INFO - Task exited with return code 1

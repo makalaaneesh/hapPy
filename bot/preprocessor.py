@@ -1,11 +1,5 @@
-import sys
-import os
-sys.path.insert(0, os.path.abspath("../models/"))
-
-
-from kafka_helper import MyKafkaConsumerProducer
-from preprocess import preprocess_text
-
+from bot.kafka_helper import MyKafkaConsumerProducer
+from models.preprocess import preprocess_text
 
 
 GROUP = "preprocessor"

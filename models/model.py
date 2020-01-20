@@ -8,11 +8,11 @@ import pandas as pd
 import pickle
 import os
 
-import helper
-import preprocess
-import performance
-import text_embeddings
-from constants import BOW, TFIDF, TEXT
+from models import helper
+from models import preprocess
+from models import performance
+from models import text_embeddings
+from models.constants import BOW, TFIDF, TEXT
 
 
 PATH = os.path.abspath("../etc/final_model.pkl")
