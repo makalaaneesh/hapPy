@@ -1,7 +1,10 @@
 *.csv
 *.ini
+*.cfg
+*.db
+*.pid
 *.idea
 *.ipynb_checkpoints
 *__pycache__
 *passwords*
-*.log
+*log
