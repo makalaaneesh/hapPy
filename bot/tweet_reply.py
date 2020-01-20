@@ -36,6 +36,8 @@ def _delete_tweets(mongo_hook, doc_ids):
 
 
 def _insert_replies(mongo_hook, reply_docs):
+    if not reply_docs:
+        return
     info("Inserting replies in tweet_replies collection")
     mongo_hook.insert_many(mongo_db="happy",
                            mongo_collection="tweet_replies",

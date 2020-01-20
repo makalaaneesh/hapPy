@@ -19,7 +19,7 @@ default_args = {
     # "schedule_interval": "@hourly",
 }
 
-NO_OF_TWEETS_TO_STREAM = 100
+NO_OF_TWEETS_TO_STREAM = 1000
 
 with DAG("stream_from_twitter",
          catchup=False,

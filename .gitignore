@@ -4,4 +4,4 @@
 *.ipynb_checkpoints
 *__pycache__
 *passwords*
-*airflow/*log*
+*.log
