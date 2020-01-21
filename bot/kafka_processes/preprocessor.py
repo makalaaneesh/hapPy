@@ -1,4 +1,4 @@
-from bot.kafka_helper import MyKafkaConsumerProducer
+from bot.kafka_processes.helper import MyKafkaConsumerProducer
 from models.preprocess import preprocess_text
 
 

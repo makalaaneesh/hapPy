@@ -1,5 +1,5 @@
-from bot.tweet_reply import send_replies
-from bot.analytics import perform_analytics
+from bot.airflow_helpers.replies import send_replies
+from bot.airflow_helpers.analytics import perform_analytics
 
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator

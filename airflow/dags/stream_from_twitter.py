@@ -1,8 +1,7 @@
-from bot.twitter_stream import read_stream_of_tweets
+from bot.airflow_helpers.twitter_helper import read_stream_of_tweets
 
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-from airflow.operators.bash_operator import BashOperator
 from datetime import datetime, timedelta
 
 
@@ -19,7 +18,7 @@ default_args = {
     # "schedule_interval": "@hourly",
 }
 
-NO_OF_TWEETS_TO_STREAM = 1000
+NO_OF_TWEETS_TO_STREAM = 10
 
 with DAG("stream_from_twitter",
          catchup=False,
@@ -34,7 +33,7 @@ with DAG("stream_from_twitter",
     # calling the function directly using a pythonoperator was not working.
     # Return code -6 was returned.
     # task1 = BashOperator(task_id="stream_from_twitter_to_kafka",
-    #                      bash_command="source /Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/bin/activate; python /Users/aneeshmakala/Documents/ComputerScience/datascience/hapPy/bot/twitter_stream.py")
+    #                      bash_command="source /Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/bin/activate; python /Users/aneeshmakala/Documents/ComputerScience/datascience/hapPy/bot/twitter_helper.py")
 
 
 task1

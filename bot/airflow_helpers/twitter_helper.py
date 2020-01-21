@@ -1,8 +1,6 @@
 import tweepy
-import sys
-from multiprocessing import Process
-from bot.passwords import *
-from bot.kafka_helper import MyKafkaProducer
+from bot.airflow_helpers.passwords import *
+from bot.kafka_processes.helper import MyKafkaProducer
 
 TOPIC_PUB = "raw_tweets"
 
@@ -28,7 +26,7 @@ class MyStreamListener(tweepy.StreamListener):
                 'text': status.text
             }
             print(status_info)
-            self.kafka_producer.publish_message(TOPIC_PUB, value=status_info)
+            # self.kafka_producer.publish_message(TOPIC_PUB, value=status_info)
             self.current_num_tweets = self.current_num_tweets + 1
 
     def on_error(self, status_code):
@@ -37,19 +35,40 @@ class MyStreamListener(tweepy.StreamListener):
             return False
 
 
-def read_stream_of_tweets(n):
+def _get_api(auth):
+    api = tweepy.API(auth)
+    return api
+
+
+def _get_auth():
     auth = tweepy.OAuthHandler(consumer_token,
                                consumer_secret)
 
     auth.set_access_token(access_token,
                           access_secret)
 
+    return auth
+
+
+def read_stream_of_tweets(n):
     myStreamListener = MyStreamListener(num_tweets=n)
-    myStream = tweepy.Stream(auth=auth,
+    myStream = tweepy.Stream(auth=_get_auth(),
                              listener=myStreamListener)
 
     myStream.filter(track=['life'], languages=['en'])
 
 
+def send_tweet(text, in_reply_to_status_id=None):
+    auth = _get_auth()
+    api = _get_api(auth)
+
+    api_kwargs = {
+        'status':text
+    }
+    if in_reply_to_status_id:
+        api_kwargs['in_reply_to_status_id'] = in_reply_to_status_id
+    api.update_status(**api_kwargs)
+
+
 if __name__ == "__main__":
-    read_stream_of_tweets(1000)
+    read_stream_of_tweets(10)

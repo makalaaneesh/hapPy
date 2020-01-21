@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from termcolor import colored
 
-from bot.kafka_helper import MyKafkaConsumer
+from bot.kafka_processes.helper import MyKafkaConsumer
 
 
 GROUP = "mongo_loader"

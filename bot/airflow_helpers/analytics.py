@@ -5,12 +5,16 @@ from collections import defaultdict
 from models.preprocess import preprocess_text
 import unidecode
 
-def _get_mongo_hook():
-    return MongoHook()
+from bot.airflow_helpers.db_helper import get_all_docs
+
+MONGODB_DB = "happy"
+MONGODB_COLLECTION_SOURCE = "tweet_replies"
+MYSQL_DB = "happy"
+MYSQL_TABLE_DESTINATION = "tweet_analytics_wordcount"
 
 
 def _get_mysql_hook():
-    return MySqlHook(schema="happy")
+    return MySqlHook(schema=MYSQL_DB)
 
 
 def _count(word_counter, text):
@@ -25,10 +29,8 @@ def _count(word_counter, text):
     print(word_counter)
 
 
-def _get_word_count_depressed_tweets_replied(mongo_hook):
-    replied_tweet_docs = mongo_hook.find(mongo_db="happy",
-                                         mongo_collection="tweet_replies",
-                                         query={})
+def _get_word_count_depressed_tweets_replied():
+    replied_tweet_docs = get_all_docs(MONGODB_DB, MONGODB_COLLECTION_SOURCE)
 
     word_counter = defaultdict(lambda: 0)
     for tweet_doc_info in replied_tweet_docs:
@@ -40,7 +42,7 @@ def _get_word_count_depressed_tweets_replied(mongo_hook):
 
 def _insert_word_count_to_mysql(mysql_hook, word_counts):
     # deleting first
-    table_name = "tweet_analytics_wordcount"
+    table_name = MYSQL_TABLE_DESTINATION
     delete_sql = "delete from {table_name};".format(table_name=table_name)
     mysql_hook.run(delete_sql)
 
@@ -56,8 +58,7 @@ def _insert_word_count_to_mysql(mysql_hook, word_counts):
 
 
 def perform_analytics():
-    mongo_hook = _get_mongo_hook()
-    word_counts = _get_word_count_depressed_tweets_replied(mongo_hook)
+    word_counts = _get_word_count_depressed_tweets_replied()
     mysql_hook = _get_mysql_hook()
     _insert_word_count_to_mysql(mysql_hook, word_counts)
 
