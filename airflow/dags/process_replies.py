@@ -19,7 +19,7 @@ default_args = {
     # "schedule_interval": "@hourly",
 }
 
-NO_OF_REPLIES = 5
+NO_OF_REPLIES = 2
 
 with DAG("process_replies",
          catchup=False,

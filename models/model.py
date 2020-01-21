@@ -15,7 +15,8 @@ from models import text_embeddings
 from models.constants import BOW, TFIDF, TEXT
 
 
-PATH = os.path.abspath("../etc/final_model.pkl")
+
+PATH = "{basepath}/etc/final_model.pkl".format(basepath=os.environ['HAPPY_HOME'])
 
 def dump_model(model):
     with open(PATH, "wb") as f:

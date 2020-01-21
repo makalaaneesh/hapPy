@@ -1,6 +1,7 @@
 
 from logging import info, warning
 from bot.airflow_helpers.db_helper import insert_docs, delete_docs, get_docs
+from bot.airflow_helpers.quotes import get_uplifting_quote
 from bot.airflow_helpers.twitter_helper import send_tweet
 
 
@@ -19,25 +20,26 @@ def _get_top_depressed_tweets(n):
                     aggregate_query)
 
 
-def _get_uplifting_quote(tweet):
-    text = "Sometimes, life will kick you around, but sooner or later, you realize you’re not just a survivor." \
-           " You’re a warrior, and you’re stronger than anything life throws your way. - " \
-           "Brooke Davis"
-    reply_text = "{0} #MentalHealth #MentalHealthAwareness".format(text)
-    return reply_text
-
-
 def _tweet_reply(reply_doc):
-    print(reply_doc)
+    # print(reply_doc)
 
-    pass
+    text = "@{user_mention} {text}".format(user_mention=reply_doc['tweet_doc']['author'], text=reply_doc['reply'])
+    in_reply_to_status_id = reply_doc['tweet_doc']['_id']
+
+
+    # from datetime import datetime
+    # text = "@hapybot test again" + str(datetime.now())
+    # in_reply_to_status_id="1219607118698831872"
+
+    print(text, in_reply_to_status_id)
+    send_tweet(text, in_reply_to_status_id=in_reply_to_status_id)
 
 
 def send_replies(n):
     tweet_docs = _get_top_depressed_tweets(n)
     reply_documents = []
     for tweet_doc in tweet_docs:
-        uplifting_quote = _get_uplifting_quote(tweet_doc['text'])
+        uplifting_quote = get_uplifting_quote(tweet_doc['text'])
         reply_doc = {
             'tweet_doc' : tweet_doc,
             'reply' : uplifting_quote,

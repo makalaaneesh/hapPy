@@ -1,5 +1,7 @@
 from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
 from termcolor import colored
+from logging import error
 
 from bot.kafka_processes.helper import MyKafkaConsumer
 
@@ -24,8 +26,13 @@ class MongoLoader(MyKafkaConsumer):
         del msg["id"]
 
         # inserting to mongo
-        db.tweets.insert_one(msg)
-        print(colored("Inserted msg into mongo: ", "green"), msg)
+        try:
+            db.tweets.insert_one(msg)
+            print(colored("Inserted msg into mongo: ", "green"), msg)
+        except DuplicateKeyError as e:
+            error(e)
+
+
 
 
 if __name__ == "__main__":

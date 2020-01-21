@@ -23,10 +23,11 @@ class MyStreamListener(tweepy.StreamListener):
             print(status.text)
             status_info = {
                 'id': status.id_str,
-                'text': status.text
+                'text': status.text,
+                'author': status.author.screen_name
             }
             print(status_info)
-            # self.kafka_producer.publish_message(TOPIC_PUB, value=status_info)
+            self.kafka_producer.publish_message(TOPIC_PUB, value=status_info)
             self.current_num_tweets = self.current_num_tweets + 1
 
     def on_error(self, status_code):
@@ -66,7 +67,8 @@ def send_tweet(text, in_reply_to_status_id=None):
         'status':text
     }
     if in_reply_to_status_id:
-        api_kwargs['in_reply_to_status_id'] = in_reply_to_status_id
+        api_kwargs['in_reply_to_status_id'] = str(in_reply_to_status_id)
+    print("twitter send", api_kwargs)
     api.update_status(**api_kwargs)
 
 
