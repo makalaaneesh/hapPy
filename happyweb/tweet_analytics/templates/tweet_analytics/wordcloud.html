@@ -1,0 +1,34 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'tweet_analytics/milligram.css' %}">
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WordCloud</title>
+</head>
+
+
+
+
+<body>
+<h2 align="center">Here's a wordcloud of all the tweets categorized as having signs of depression:</h2>
+
+<hr>
+
+<div class="container">
+
+    <div class="row">
+        <div class="column column-80 column-offset-10">
+            <img src="data:image/png;base64,{{ wordcloud_image_str }}">
+        </div>
+
+    </div>
+
+
+</div>
+
+
+</body>
+</html>

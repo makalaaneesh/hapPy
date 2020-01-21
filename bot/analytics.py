@@ -1,19 +1,28 @@
 from airflow.contrib.hooks.mongo_hook import MongoHook
+from airflow.hooks.mysql_hook import MySqlHook
 from wordcloud import STOPWORDS
 from collections import defaultdict
 from models.preprocess import preprocess_text
-
+import unidecode
 
 def _get_mongo_hook():
     return MongoHook()
 
 
-def _count(word_counter, text):
+def _get_mysql_hook():
+    return MySqlHook(schema="happy")
 
+
+def _count(word_counter, text):
     text = preprocess_text(text, is_stem=False)
     words = text.split()
     for word in words:
+        # to remove accented unicode chars
+        word = unidecode.unidecode_expect_ascii(word)
+        if word in STOPWORDS:
+            continue
         word_counter[word] = word_counter[word]+1
+    print(word_counter)
 
 
 def _get_word_count_depressed_tweets_replied(mongo_hook):
@@ -29,24 +38,28 @@ def _get_word_count_depressed_tweets_replied(mongo_hook):
     return word_counter
 
 
-def _insert_word_count_to_mongo(mongo_hook, word_counts):
+def _insert_word_count_to_mysql(mysql_hook, word_counts):
     # deleting first
-    mongo_hook.delete_many(mongo_db="happy",
-                           mongo_collection="word_count",
-                           filter_doc={})
+    table_name = "tweet_analytics_wordcount"
+    delete_sql = "delete from {table_name};".format(table_name=table_name)
+    mysql_hook.run(delete_sql)
 
-    word_count_docs = [{"_id": word, "count": count} for word, count in word_counts.items()]
+    # reset autoincrement
+    auto_increment_sql = "ALTER TABLE {table_name} AUTO_INCREMENT = 1;".format(table_name=table_name)
+    mysql_hook.run(auto_increment_sql)
+
+    word_count_rows = [(word, count) for word, count in word_counts.items()]
 
     #inserting
-    mongo_hook.insert_many(mongo_db="happy",
-                           mongo_collection="word_count",
-                           docs=word_count_docs)
+    mysql_hook.insert_rows(table_name, word_count_rows,
+                           target_fields=('word', 'count'))
 
 
 def perform_analytics():
     mongo_hook = _get_mongo_hook()
     word_counts = _get_word_count_depressed_tweets_replied(mongo_hook)
-    _insert_word_count_to_mongo(mongo_hook, word_counts)
+    mysql_hook = _get_mysql_hook()
+    _insert_word_count_to_mysql(mysql_hook, word_counts)
 
 
 
