@@ -53,3 +53,10 @@ def get_collection_count(db, collection):
 
     coll_count = coll.count_documents({})
     return coll_count
+
+
+def drop_collection(db, collection):
+    mongo_hook = get_mongo_hook()
+    coll = mongo_hook.get_collection(mongo_collection=collection,
+                                     mongo_db=db)
+    coll.drop()

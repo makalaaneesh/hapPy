@@ -1,4 +1,5 @@
-from bot.airflow_helpers.twitter_helper import read_stream_of_tweets
+from bot.airflow_helpers.replies import MONGODB_COLLECTION_SOURCE, MONGODB_DB
+from bot.airflow_helpers.db_helper import drop_collection
 
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
@@ -10,7 +11,7 @@ default_args = {
     "owner": "me",
     "depends_on_past": False,
     "start_date": datetime(2020, 1, 20),
-    "email": ["makalaaneesh18@mail.com"],
+    "email": ["makalaaneesh18@gmail.com"],
     "email_on_failure": False,
     "email_on_retry": False,
     "retries": 0,
@@ -18,15 +19,14 @@ default_args = {
     # "schedule_interval": "@hourly",
 }
 
-NO_OF_TWEETS_TO_STREAM = 2000
 
-with DAG("stream_from_twitter",
+with DAG("reset",
          catchup=False,
          default_args=default_args,
-         schedule_interval="0 */6 * * *") as dag:
-    task1 = PythonOperator(task_id="stream_from_twitter_to_kafka",
-                           python_callable=read_stream_of_tweets,
-                           op_args=(NO_OF_TWEETS_TO_STREAM,))
+         schedule_interval="@daily") as dag:
+    task1 = PythonOperator(task_id="reset_db",
+                           python_callable=drop_collection,
+                           op_args=(MONGODB_DB, MONGODB_COLLECTION_SOURCE))
 
     # Need to refactor this.
     # Not ideal.
