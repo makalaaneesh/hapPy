@@ -72,5 +72,13 @@ def send_tweet(text, in_reply_to_status_id=None):
     api.update_status(**api_kwargs)
 
 
+def does_status_exist(_id):
+    auth = _get_auth()
+    api = _get_api(auth)
+
+    result = api.statuses_lookup([str(_id)])
+    return bool(result)
+
+
 if __name__ == "__main__":
     read_stream_of_tweets(10)
