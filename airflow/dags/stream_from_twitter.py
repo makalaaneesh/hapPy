@@ -23,7 +23,7 @@ NO_OF_TWEETS_TO_STREAM = 1000
 with DAG("stream_from_twitter",
          catchup=False,
          default_args=default_args,
-         schedule_interval="@hourly") as dag:
+         schedule_interval="@daily") as dag:
     task1 = PythonOperator(task_id="stream_from_twitter_to_kafka",
                            python_callable=read_stream_of_tweets,
                            op_args=(NO_OF_TWEETS_TO_STREAM,))

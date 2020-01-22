@@ -24,7 +24,7 @@ NO_OF_REPLIES = 2
 with DAG("process_replies",
          catchup=False,
          default_args=default_args,
-         schedule_interval="*/10 * * * *") as dag:
+         schedule_interval="@hourly") as dag:
     task1 = PythonOperator(task_id="send_replies",
                            python_callable=send_replies,
                            op_args=(NO_OF_REPLIES,))
