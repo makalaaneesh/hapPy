@@ -1,5 +1,7 @@
 from logging import info, warn
 from airflow.contrib.hooks.mongo_hook import MongoHook
+from datetime import datetime
+from bot.airflow_helpers.twitter_helper import TIMESTAMP_FORMAT
 
 
 def get_mongo_hook():
@@ -60,3 +62,24 @@ def drop_collection(db, collection):
     coll = mongo_hook.get_collection(mongo_collection=collection,
                                      mongo_db=db)
     coll.drop()
+
+
+def delete_docs_older_than(db, collection, days=1):
+    all_docs = get_all_docs(db, collection)
+    doc_ids_to_delete = []
+
+    now = datetime.now()
+    for doc in all_docs:
+        doc_timestamp = doc.get('timestamp', None)
+        doc_id = doc['_id']
+        if doc_timestamp:
+            doc_time_obj = datetime.strptime(doc_timestamp, TIMESTAMP_FORMAT)
+            delta = now - doc_time_obj
+            if delta.days >= days:
+                doc_ids_to_delete.append(doc_id)
+        else:
+            doc_ids_to_delete.append(doc_id)
+
+    delete_docs(db, collection, doc_ids_to_delete)
+
+

@@ -1,4 +1,6 @@
 from bot.airflow_helpers.twitter_helper import read_stream_of_tweets
+from bot.airflow_helpers.replies import MONGODB_COLLECTION_SOURCE, MONGODB_DB
+from bot.airflow_helpers.db_helper import delete_docs_older_than
 
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
@@ -19,12 +21,16 @@ default_args = {
 }
 
 NO_OF_TWEETS_TO_STREAM = 2000
+DELETE_OLDER_TWEETS_DAYS = 1
 
 with DAG("stream_from_twitter",
          catchup=False,
          default_args=default_args,
          schedule_interval="0 */6 * * *") as dag:
-    task1 = PythonOperator(task_id="stream_from_twitter_to_kafka",
+    task1 = PythonOperator(task_id="delete_older_tweets",
+                           python_callable=delete_docs_older_than,
+                           op_args=(MONGODB_DB, MONGODB_COLLECTION_SOURCE, DELETE_OLDER_TWEETS_DAYS))
+    task2 = PythonOperator(task_id="stream_from_twitter_to_kafka",
                            python_callable=read_stream_of_tweets,
                            op_args=(NO_OF_TWEETS_TO_STREAM,))
 
@@ -36,4 +42,4 @@ with DAG("stream_from_twitter",
     #                      bash_command="source /Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/bin/activate; python /Users/aneeshmakala/Documents/ComputerScience/datascience/hapPy/bot/twitter_helper.py")
 
 
-task1
+task1 >> task2

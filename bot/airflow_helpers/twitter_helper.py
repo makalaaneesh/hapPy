@@ -3,6 +3,7 @@ from bot.airflow_helpers.passwords import *
 from bot.kafka_processes.helper import MyKafkaProducer
 
 TOPIC_PUB = "raw_tweets"
+TIMESTAMP_FORMAT="%a %b %d %H:%M:%S %Y"
 
 
 # override tweepy.StreamListener to add logic to on_status
@@ -24,7 +25,8 @@ class MyStreamListener(tweepy.StreamListener):
             status_info = {
                 'id': status.id_str,
                 'text': status.text,
-                'author': status.author.screen_name
+                'author': status.author.screen_name,
+                'timestamp' : status.created_at.strftime(TIMESTAMP_FORMAT)
             }
             print(status_info)
             self.kafka_producer.publish_message(TOPIC_PUB, value=status_info)
