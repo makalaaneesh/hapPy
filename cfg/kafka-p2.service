@@ -1,0 +1,19 @@
+[Unit]
+Description=kafka consumer predictor
+Requires=network.target remote-fs.target kafka.service
+After=network.target remote-fs.target kafka.service
+
+[Service]
+#EnvironmentFile=/etc/sysconfig/airflow
+Environment=AIRFLOW_HOME=/home/aneeshmakala/hapPy/airflow
+Environment=HAPPY_HOME=/home/aneeshmakala/hapPy
+User=aneeshmakala
+Group=aneeshmakala
+Type=simple
+ExecStart=/bin/bash -c "cd /home/aneeshmakala/hapPy && source /home/aneeshmakala/venv/bin/activate && python /home/aneeshmakala/hapPy/bot/kafka_processes/predictor.py"
+Restart=on-failure
+RestartSec=5s
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

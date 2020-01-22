@@ -1,0 +1,19 @@
+[Unit]
+Description=Airflow scheduler daemon
+Requires=network.target remote-fs.target
+After=network.target remote-fs.target
+
+[Service]
+#EnvironmentFile=/etc/sysconfig/airflow
+Environment=AIRFLOW_HOME=/home/aneeshmakala/hapPy/airflow
+Environment=HAPPY_HOME=/home/aneeshmakala/hapPy
+User=aneeshmakala
+Group=aneeshmakala
+Type=simple
+ExecStart=/bin/bash -c "cd /home/aneeshmakala/hapPy/airflow && source /home/aneeshmakala/venv/bin/activate && /home/aneeshmakala/venv/bin/airflow scheduler"
+Restart=on-failure
+RestartSec=5s
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
