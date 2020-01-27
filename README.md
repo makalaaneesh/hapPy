@@ -17,7 +17,7 @@
             - Define relevance and build an algorithm to pick a relevant quote from the corpus.
 - ## Engineering
     - ### Data flow
-        
+        ![](happybot_architecture.png)
         - tweepy StreamListener is used to process a stream of incoming tweets
         - The raw tweets are ingested into a kafka topic
         - The "preprocess" consumer consumes the raw tweets, preprocesses them and puts them on another kafka topic.
