@@ -113,6 +113,11 @@ class Model:
         return self.y_test
 
     def initialize(self):
+        """
+        1. Loads the data
+        2. Splits the data into training and test data.
+        3. Creates features by using a vectorizer
+        """
         self._load_data()
         self._split_data()
         self._fit_vectorizer()

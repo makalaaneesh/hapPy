@@ -39,12 +39,9 @@ class MyKafkaProducer(MyKafkaClient):
 
     def publish_message(self, topic_name, value, key=None):
         try:
-            # key_bytes = bytes(key, encoding='utf-8')
-            # value_bytes = bytes(value, encoding='utf-8')
             self.producer.send(topic_name, value=value, key=key)
             self.producer.flush()
             print(colored('Message published successfully:', 'green'), value)
-            # print('Message published successfully:', value)
         except Exception as ex:
             print(colored('Could not publish message', 'red'))
             print(colored(str(ex), 'red'))
@@ -69,9 +66,17 @@ class MyKafkaConsumer(MyKafkaClient):
                              value_deserializer=deserializer)
 
     def produce(self, msg):
+        """
+        In this method, Subclasses should implement the logic
+        for loading(ETL) the consumed and transformed message elsewhere.
+        """
         raise NotImplementedError()
 
     def transform(self, msg):
+        """
+        In this method, subclasses should implement the logic
+        to transform(ETL) the consumed message.
+        """
         raise NotImplementedError()
 
     def run(self):

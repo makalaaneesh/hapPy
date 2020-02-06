@@ -18,6 +18,9 @@ def _get_mysql_hook():
 
 
 def _count(word_counter, text):
+    """
+    Updates dictionary with word->count
+    """
     text = preprocess_text(text, min_len=0, is_stem=False)
     words = text.split()
     for word in words:
@@ -30,6 +33,10 @@ def _count(word_counter, text):
 
 
 def _get_word_count_depressed_tweets_replied():
+    """
+    :return: Of all the tweets that were categorized as depressed,
+            get the word count
+    """
     replied_tweet_docs = get_all_docs(MONGODB_DB, MONGODB_COLLECTION_SOURCE)
 
     word_counter = defaultdict(lambda: 0)

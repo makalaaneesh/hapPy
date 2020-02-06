@@ -17,7 +17,6 @@ default_args = {
     "email_on_retry": False,
     "retries": 0,
     "retry_delay": timedelta(minutes=1),
-    # "schedule_interval": "@hourly",
 }
 
 NO_OF_TWEETS_TO_STREAM = 5000
@@ -33,13 +32,6 @@ with DAG("stream_from_twitter",
     task2 = PythonOperator(task_id="stream_from_twitter_to_kafka",
                            python_callable=read_stream_of_tweets,
                            op_args=(NO_OF_TWEETS_TO_STREAM,))
-
-    # Need to refactor this.
-    # Not ideal.
-    # calling the function directly using a pythonoperator was not working.
-    # Return code -6 was returned.
-    # task1 = BashOperator(task_id="stream_from_twitter_to_kafka",
-    #                      bash_command="source /Users/aneeshmakala/Documents/ComputerScience/datascience/venv_datascience/bin/activate; python /Users/aneeshmakala/Documents/ComputerScience/datascience/hapPy/bot/twitter_helper.py")
 
 
 task1 >> task2

@@ -5,6 +5,13 @@ PATH = "{basepath}/etc/quotes.txt".format(basepath=os.environ['HAPPY_HOME'])
 
 
 def get_uplifting_quote(tweet, limit=280):
+    """
+    :param tweet: tweet text
+    :param limit: limit of characters
+    :return: Get a random quote from the list of quotes and return one.
+
+    TODO: Pick a relevant quote(and not just any random quote)
+    """
     with open(PATH, "r") as f:
         quotes = f.readlines()
 

@@ -14,10 +14,8 @@ class PredictorConsumerProducer(MyKafkaConsumerProducer):
 
     def transform(self, msg):
         prediction_info = self.model.predict(msg['text'])
-        # print(type(msg['text']))
-        # print(msg)
-        # print(prediction_info)
-        # print()
+
+        # Only retaining the positive class
         if prediction_info['class'] == 1:
             msg.update(prediction_info)
             return msg

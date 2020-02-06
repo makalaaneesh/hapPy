@@ -16,7 +16,6 @@ default_args = {
     "email_on_retry": False,
     "retries": 0,
     "retry_delay": timedelta(minutes=1),
-    # "schedule_interval": "@hourly",
 }
 
 NO_OF_REPLIES = 2

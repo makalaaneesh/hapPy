@@ -10,8 +10,6 @@ TOPIC_PUB = "preprocessed_tweets"
 class PreprocessConsumerProducer(MyKafkaConsumerProducer):
     def transform(self, msg):
         msg['preprocessed_text'] = preprocess_text(msg['text'])
-        # print(msg)
-        # print()
         return msg
 
 
