@@ -1,8 +1,9 @@
+- ## Bot in Action
+    - https://twitter.com/hapybot/with_replies
 - ## Abstract
     - Every day, thousands suffering from mental illnesses like anxiety and depression post on social media. For example, on reddit, there is a subreddit for depression (https://www.reddit.com/r/depression/) where people can vent and express their feelings. Searching for #depression on twitter gives many tweet results by depressed people. This project aims to build a twitter bot (or a bot for any text-based social media platform) that does two tasks:
         - Identify if the tweet has signals of mental illnesses.
         - Reply to the tweet with an inspiring, relevant quote (from a corpus of quotes) that can help the person get a wider and better perspective, thus, helping them get out of their mental rut. 
-    - Check it out at https://twitter.com/hapybot/with_replies
 - ## How it works
     - ### Identifying if the tweet has signals of mental illnesses
         - For task 1, to identify whether the tweet's text has signals of mental illnesses or not, a machine learning binary classification model is used. Till now, the following models have been tried out:
