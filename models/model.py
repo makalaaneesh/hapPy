@@ -7,6 +7,7 @@ from logging import warning
 import pandas as pd
 import pickle
 import os
+import bz2
 
 from models import helper
 from models import preprocess
@@ -16,17 +17,29 @@ from models.constants import BOW, TFIDF, TEXT
 
 
 
-PATH = "{basepath}/etc/final_model.pkl".format(basepath=os.environ['HAPPY_HOME'])
+MODEL_PATH = "{basepath}/etc/model_{model_id}.pkl"
+BASE_PATH = os.environ['HAPPY_HOME']
 
 def dump_model(model):
-    with open(PATH, "wb") as f:
+    path = MODEL_PATH.format(basepath=BASE_PATH,
+                             model_id=model.id)
+    with bz2.BZ2File(path, 'wb') as f:
+    # with open(path, "wb") as f:
         pickle.dump(model, f)
 
 
 def load_model():
-    with open(PATH, "rb") as f:
-        final_model = pickle.load(f)
-        return final_model
+    path = MODEL_PATH.format(basepath=BASE_PATH,
+                             model_id="final")
+    try:
+        with bz2.BZ2File(path, 'rb') as f:
+        # with open(path, "rb") as f:
+            final_model = pickle.load(f)
+    except:
+        with open(path, "rb") as f:
+            final_model = pickle.load(f)
+
+    return final_model
 
 
 class Model:
@@ -34,8 +47,9 @@ class Model:
                  model_class,
                  model_params,
                  text_embedder,
-                 text_embedder_params):
-
+                 text_embedder_params,
+                 id=""):
+        self.id = id
         self.model_class = model_class
         self.model_params = model_params
         self.model = self.model_class(**self.model_params)
@@ -80,7 +94,7 @@ class Model:
         return self.vectorizer.transform(x[TEXT].values.astype(str))
 
     def _preprocess_text(self, text):
-        return preprocess.preprocess_text(text)
+        return preprocess.preprocess_text(text, min_len=0)
 
     @property
     def final_x_train(self):
