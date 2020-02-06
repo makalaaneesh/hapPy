@@ -18,7 +18,7 @@ def _get_mysql_hook():
 
 
 def _count(word_counter, text):
-    text = preprocess_text(text, is_stem=False)
+    text = preprocess_text(text, min_len=0, is_stem=False)
     words = text.split()
     for word in words:
         # to remove accented unicode chars
