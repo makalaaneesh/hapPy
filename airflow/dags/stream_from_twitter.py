@@ -20,7 +20,7 @@ default_args = {
     # "schedule_interval": "@hourly",
 }
 
-NO_OF_TWEETS_TO_STREAM = 2000
+NO_OF_TWEETS_TO_STREAM = 5000
 DELETE_OLDER_TWEETS_DAYS = 1
 
 with DAG("stream_from_twitter",
