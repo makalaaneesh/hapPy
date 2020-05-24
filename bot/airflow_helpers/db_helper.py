@@ -32,6 +32,12 @@ def insert_docs(db, collection, docs):
                            mongo_collection=collection,
                            docs=docs)
 
+def update_doc(db, collection, doc_id, new_doc):
+    mongo_hook = get_mongo_hook()
+    mongo_hook.update_one(mongo_db=db,
+                          mongo_collection=collection,
+                          filter_doc={'_id': str(doc_id)},
+                          update_doc=new_doc)
 
 def get_all_docs(db, collection):
     mongo_hook = get_mongo_hook()

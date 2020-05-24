@@ -66,12 +66,12 @@ def send_tweet(text, in_reply_to_status_id=None):
     api = _get_api(auth)
 
     api_kwargs = {
-        'status':text
+        'status': text
     }
     if in_reply_to_status_id:
         api_kwargs['in_reply_to_status_id'] = str(in_reply_to_status_id)
     print("twitter send", api_kwargs)
-    api.update_status(**api_kwargs)
+    return api.update_status(**api_kwargs)
 
 
 def does_status_exist(_id):
@@ -81,6 +81,28 @@ def does_status_exist(_id):
     result = api.statuses_lookup([str(_id)])
     return bool(result)
 
+
+def get_tweets(_ids):
+    if not _ids:
+        return []
+    auth = _get_auth()
+    api = _get_api(auth)
+
+    result = api.statuses_lookup(_ids)
+    return result
+
+
+def user_has_liked_tweet(username, tweet_id):
+    auth = _get_auth()
+    api = _get_api(auth)
+
+    i = 0
+    for favorite in tweepy.Cursor(api.favorites, id="@{username}".format(username=username)).items(100):
+        print(i)
+        i = i + 1
+        if tweet_id == str(favorite.id):
+            return True
+    return False
 
 if __name__ == "__main__":
     read_stream_of_tweets(10)

@@ -1,13 +1,15 @@
 
 from logging import info, warning
-from bot.airflow_helpers.db_helper import insert_docs, delete_docs, get_docs, get_collection_count
-from bot.airflow_helpers.quotes import get_uplifting_quote
-from bot.airflow_helpers.twitter_helper import send_tweet, does_status_exist
+from bot.airflow_helpers.db_helper import insert_docs, delete_docs, get_docs, get_collection_count, get_all_docs
+from bot.airflow_helpers.quotes import get_uplifting_quote, get_follow_up_response
+from bot.airflow_helpers.twitter_helper import send_tweet, does_status_exist, get_tweets, user_has_liked_tweet
 
 
 MONGODB_DB = "happy"
-MONGODB_COLLECTION_SOURCE = "tweets"
-MONGODB_COLLECTION_DESTINATION = "tweet_replies"
+MONGODB_COLLECTION_TWEETS_SOURCE = "tweets"
+MONGODB_COLLECTION_TWEETS_DESTINATION = "tweet_replies"
+
+MONGODB_COLLECTION_TWEET_REPLIES_SOURCE = "tweet_replies"
 
 
 def _get_top_depressed_tweets(n):
@@ -26,7 +28,7 @@ def _get_top_depressed_tweets(n):
 
     while len(depressed_tweets) < n:
         collection_count = get_collection_count(MONGODB_DB,
-                                                MONGODB_COLLECTION_SOURCE)
+                                                MONGODB_COLLECTION_TWEETS_SOURCE)
         if docs_to_retrieve > collection_count:
             raise ValueError("Collection has only %s documents. Cannot query for more (%s)"
                              % (collection_count, docs_to_retrieve))
@@ -37,8 +39,8 @@ def _get_top_depressed_tweets(n):
             {'$limit': docs_to_retrieve}
         ]
         docs =  get_docs(MONGODB_DB,
-                        MONGODB_COLLECTION_SOURCE,
-                        aggregate_query)
+                         MONGODB_COLLECTION_TWEETS_SOURCE,
+                         aggregate_query)
         for doc in docs:
             doc_id = str(doc['_id'])
             if doc_id not in visited_depressed_tweet_ids:
@@ -54,22 +56,27 @@ def _get_top_depressed_tweets(n):
         docs_to_retrieve = docs_to_retrieve + (docs_to_retrieve*2)
 
     # deleting the docs corresponding to the tweets that were deleted.
-    delete_docs(MONGODB_DB, MONGODB_COLLECTION_SOURCE, non_existent_doc_ids)
+    delete_docs(MONGODB_DB, MONGODB_COLLECTION_TWEETS_SOURCE, non_existent_doc_ids)
     return depressed_tweets[:n]
 
 
-def _tweet_reply(reply_doc):
+def _tweet_reply(docs):
     """
     Send reply to the tweet.
     """
+    tweet_doc = docs['tweet_doc']
+    reply_doc = docs['reply_doc']
 
-    reply_text = "@{user_mention} {text}".format(user_mention=reply_doc['tweet_doc']['author'], text=reply_doc['reply'])
-    in_reply_to_status_id = reply_doc['tweet_doc']['_id']
+    reply_text = "@{user_mention} {text}".format(user_mention=tweet_doc['author'], text=reply_doc['text'])
+    in_reply_to_status_id = tweet_doc['_id']
 
-    print(reply_doc['tweet_doc']['text'], reply_doc['tweet_doc']['prob'])
-    print(reply_text)
+    print("Replying to ", tweet_doc['text'], "with", reply_doc["text"])
+    if hasattr(tweet_doc, 'prob'):
+        print(tweet_doc['prob'])
+    # print(reply_doc['text'])
     print()
-    send_tweet(reply_text, in_reply_to_status_id=in_reply_to_status_id)
+    tweet_reponse = send_tweet(reply_text, in_reply_to_status_id=in_reply_to_status_id)
+    reply_doc['_id'] = tweet_reponse.id_str
 
 
 def send_replies(n):
@@ -77,23 +84,80 @@ def send_replies(n):
     reply_documents = []
     for tweet_doc in tweet_docs:
         uplifting_quote = get_uplifting_quote(tweet_doc['text'])
-        reply_doc = {
-            'tweet_doc' : tweet_doc,
-            'reply' : uplifting_quote,
-
+        docs = {
+            'tweet_doc': tweet_doc,
+            'reply_doc': {'text': uplifting_quote}
         }
 
         # send reply
-        _tweet_reply(reply_doc)
+        _tweet_reply(docs)
 
-        reply_documents.append(reply_doc)
+        reply_documents.append(docs)
 
     # inserting them in a different collection
-    insert_docs(MONGODB_DB, MONGODB_COLLECTION_DESTINATION, reply_documents)
+    insert_docs(MONGODB_DB, MONGODB_COLLECTION_TWEETS_DESTINATION, reply_documents)
 
     # removing them from the old collection
     # TODO: ideally I could have just updated the existing docs in the same collection.
-    delete_docs(MONGODB_DB, MONGODB_COLLECTION_SOURCE, [doc['tweet_doc']['_id'] for doc in reply_documents])
+    delete_docs(MONGODB_DB, MONGODB_COLLECTION_TWEETS_SOURCE, [doc['tweet_doc']['_id'] for doc in reply_documents])
+
+
+def should_follow_up(tweet_obj, author):
+    # if favorite count has increased
+        # if person has actually liked
+            # true
+    if tweet_obj.favorite_count > 0:
+        if user_has_liked_tweet(author, tweet_obj.id_str):
+            return True
+    return False
+
+
+def follow_up_with_replies():
+    # get all documents
+    tweet_with_reply_docs = get_all_docs(MONGODB_DB, MONGODB_COLLECTION_TWEET_REPLIES_SOURCE)
+
+    reply_tweet_dict = {doc['reply_doc']['_id']: doc for doc in tweet_with_reply_docs}
+
+    reply_tweet_objs = get_tweets(reply_tweet_dict.keys())
+
+    doc_ids_to_delete = []
+
+    for reply_tweet_obj in reply_tweet_objs:
+        reply_tweet_id = reply_tweet_obj.id_str
+        reply_tweet_doc = reply_tweet_dict[reply_tweet_id]
+        if should_follow_up(reply_tweet_obj, reply_tweet_doc['tweet_doc']['author']):
+            # follow up
+            tweet_doc = {
+                "_id": reply_tweet_id,
+                "author": reply_tweet_doc['tweet_doc']['author'],
+                "text" : reply_tweet_doc['reply_doc']['text']
+            }
+
+            reply_doc = {
+                "text" : get_follow_up_response(tweet_doc)
+            }
+
+            _tweet_reply({
+                "tweet_doc" : tweet_doc,
+                "reply_doc" : reply_doc
+            })
+
+            # delete as we don't need to follow up any mor
+            doc_ids_to_delete.append(str(reply_tweet_dict[reply_tweet_id]['_id']))
+
+
+    # deleting docs
+    delete_docs(MONGODB_DB, MONGODB_COLLECTION_TWEET_REPLIES_SOURCE, doc_ids_to_delete)
+
+    # iterate
+    #   if should followup
+    #       followup
+    #       delete
+    #   else
+    #       continue #separate job will work on deleting older tweets.
+    #
+
+    pass
 
 
 if __name__ == "__main__":

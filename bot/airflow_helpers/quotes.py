@@ -24,3 +24,7 @@ def get_uplifting_quote(tweet, limit=280):
                 found_quote = True
                 break
         return quote
+
+
+def get_follow_up_response(tweet):
+    return "https://twitter.com/owhnm/status/1259038214515392512?s=20"
