@@ -12,7 +12,6 @@ def deserializer(k_or_v):
     return json.loads(k_or_v.decode('utf-8'))
 
 
-
 class MyKafkaClient():
     def __init__(self,
                  bootstrap_servers=['localhost:9092'],

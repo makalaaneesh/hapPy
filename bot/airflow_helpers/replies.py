@@ -11,6 +11,14 @@ MONGODB_COLLECTION_DESTINATION = "tweet_replies"
 
 
 def _get_top_depressed_tweets(n):
+    """
+
+    :param n: numberr
+    :return: from all the tweets that were categorized as depressed, pick
+            the top n tweets.
+            "Top" here refers to the probabilistic confidence of th models
+            classification.
+    """
     docs_to_retrieve = n
     depressed_tweets = []
     visited_depressed_tweet_ids = set()
@@ -20,7 +28,8 @@ def _get_top_depressed_tweets(n):
         collection_count = get_collection_count(MONGODB_DB,
                                                 MONGODB_COLLECTION_SOURCE)
         if docs_to_retrieve > collection_count:
-            raise ValueError("Collection has only %s documents. Cannot query for more (%s)" %(collection_count, docs_to_retrieve))
+            raise ValueError("Collection has only %s documents. Cannot query for more (%s)"
+                             % (collection_count, docs_to_retrieve))
             break
         print("Retrieving %s tweets" %(docs_to_retrieve,))
         aggregate_query = [
@@ -34,6 +43,8 @@ def _get_top_depressed_tweets(n):
             doc_id = str(doc['_id'])
             if doc_id not in visited_depressed_tweet_ids:
                 visited_depressed_tweet_ids.add(doc_id)
+                # if tweet is deleted since, then we ignore it.
+                # We pick only those tweets to which we can reply.
                 if does_status_exist(doc_id):
                     depressed_tweets.append(doc)
                 else:
@@ -42,21 +53,18 @@ def _get_top_depressed_tweets(n):
         # exponential increase in docs to fetch
         docs_to_retrieve = docs_to_retrieve + (docs_to_retrieve*2)
 
+    # deleting the docs corresponding to the tweets that were deleted.
     delete_docs(MONGODB_DB, MONGODB_COLLECTION_SOURCE, non_existent_doc_ids)
     return depressed_tweets[:n]
 
 
-
 def _tweet_reply(reply_doc):
-    # print(reply_doc)
+    """
+    Send reply to the tweet.
+    """
 
     reply_text = "@{user_mention} {text}".format(user_mention=reply_doc['tweet_doc']['author'], text=reply_doc['reply'])
     in_reply_to_status_id = reply_doc['tweet_doc']['_id']
-
-
-    # from datetime import datetime
-    # text = "@hapybot test again" + str(datetime.now())
-    # in_reply_to_status_id="1219607118698831872"
 
     print(reply_doc['tweet_doc']['text'], reply_doc['tweet_doc']['prob'])
     print(reply_text)
@@ -81,12 +89,10 @@ def send_replies(n):
         reply_documents.append(reply_doc)
 
     # inserting them in a different collection
-    # _insert_replies(mongo_hook, reply_documents)
     insert_docs(MONGODB_DB, MONGODB_COLLECTION_DESTINATION, reply_documents)
 
-
     # removing them from the old collection
-    # _delete_tweets(mongo_hook, [doc['tweet_doc']['_id'] for doc in reply_documents])
+    # TODO: ideally I could have just updated the existing docs in the same collection.
     delete_docs(MONGODB_DB, MONGODB_COLLECTION_SOURCE, [doc['tweet_doc']['_id'] for doc in reply_documents])
 
 
