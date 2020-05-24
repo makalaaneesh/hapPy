@@ -8,4 +8,5 @@
 *.ipynb_checkpoints
 *__pycache__
 *passwords*
-*log
+*logs*
+*venv*
