@@ -98,7 +98,7 @@ typing-extensions==3.7.4.1
 tzlocal==1.5.1
 unicodecsv==0.14.1
 Unidecode==1.1.1
-urllib3==1.25.7
+urllib3==1.25.8
 Werkzeug==0.16.0
 wordcloud==1.6.0
 WTForms==2.2.1
